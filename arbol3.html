@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trivia de Árboles</title>
+    <style>
+        body {
+            background-color: #FF7F00; /* Fondo naranja */
+            font-family: 'Arial', sans-serif;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        h1 {
+            text-align: center;
+            color: white;
+            font-size: 36px;
+            margin-top: 30px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header img {
+            width: 200px;
+            height: auto;
+            border-radius: 50%;
+        }
+
+        .quote {
+            color: white;
+            font-size: 20px;
+            margin-top: 10px;
+        }
+
+        .quiz-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: calc(100vh - 150px);
+        }
+
+        .question-container {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .question-container img {
+            max-width: 300px;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .answers {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .answer-btn {
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: yellow;
+            color: black;
+            border: none;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .answer-btn:hover {
+            background-color: #FFDD44;
+            transform: scale(1.1);
+        }
+
+        .score {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 24px;
+            color: white;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="https://example.com/alcatrace.png" alt="Flores Alcatraces" />
+        <h1>Cuidar un árbol hoy, es cuidar las próximas generaciones</h1>
+        <p class="quote">¡Aprende sobre la naturaleza mientras te diviertes!</p>
+    </div>
+
+    <div class="quiz-container">
+        <div id="question-container" class="question-container">
+            <!-- Imagen y preguntas aparecerán aquí -->
+        </div>
+
+        <div class="answers">
+            <!-- Respuestas aparecerán aquí -->
+        </div>
+
+        <div class="score">
+            Puntuación: <span id="score">0</span>/10
+        </div>
+    </div>
+
+    <audio id="rain-sound" loop>
+        <source src="https://example.com/sonido-lluvia.mp3" type="audio/mp3">
+        Tu navegador no soporta el elemento de audio.
+    </audio>
+
+    <script>
+        const questions = [
+            {
+                image: "https://example.com/arbol1.jpg", // Imagen del árbol
+                correctAnswer: "Roble",
+                options: ["Roble", "Pino", "Cedro", "Álamo"],
+            },
+            {
+                image: "https://example.com/arbol2.jpg", // Imagen del árbol
+                correctAnswer: "Sauce",
+                options: ["Sauce", "Fresno", "Nogal", "Olmo"],
+            },
+            {
+                image: "https://example.com/arbol3.jpg", // Imagen del árbol
+                correctAnswer: "Mango",
+                options: ["Mango", "Plátano", "Naranja", "Manzana"],
+            },
+            // Agregar más preguntas según sea necesario
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        function loadQuestion() {
+            const question = questions[currentQuestionIndex];
+            const questionContainer = document.getElementById("question-container");
+            const answersContainer = document.querySelector(".answers");
+
+            questionContainer.innerHTML = `
+                <img src="${question.image}" alt="Árbol" />
+                <h2>¿Cómo se llama este árbol?</h2>
+            `;
+
+            answersContainer.innerHTML = '';
+            question.options.forEach(option => {
+                const button = document.createElement("button");
+                button.classList.add("answer-btn");
+                button.textContent = option;
+                button.onclick = () => checkAnswer(option);
+                answersContainer.appendChild(button);
+            });
+        }
+
+        function checkAnswer(selectedAnswer) {
+            const question = questions[currentQuestionIndex];
+            if (selectedAnswer === question.correctAnswer) {
+                score++;
+                document.getElementById("score").textContent = score;
+            }
+
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                loadQuestion();
+            } else {
+                showFinalScore();
+            }
+        }
+
+        function showFinalScore() {
+            const questionContainer = document.getElementById("question-container");
+            const answersContainer = document.querySelector(".answers");
+
+            questionContainer.innerHTML = `<h2>¡Felicidades! Has completado la trivia.</h2>`;
+            answersContainer.innerHTML = `
+                <h3>Tu puntuación final es ${score} de ${questions.length}</h3>
+            `;
+        }
+
+        window.onload = () => {
+            loadQuestion();
+            document.getElementById("rain-sound").play();
+        };
+    </script>
+</body>
+</html>
